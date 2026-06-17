@@ -1,0 +1,23 @@
+.game-placeholder {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem var(--page-padding-x);
+}
+
+.game-placeholder__inner {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 60vh;
+}
+
+@media (max-width: 640px) {
+  .game-placeholder {
+    min-height: 50vh;
+  }
+
+  .game-placeholder__inner {
+    min-height: 45vh;
+  }
+}

@@ -1,0 +1,29 @@
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1rem 2rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.scroll-indicator__mouse {
+  width: 40px;
+  height: 52px;
+}
+
+.scroll-indicator__chevron {
+  font-size: 1.35rem;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.scroll-indicator__text {
+  margin-top: 0.35rem;
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}

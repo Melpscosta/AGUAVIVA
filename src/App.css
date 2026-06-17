@@ -1,0 +1,26 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #ffe566 0%,
+    #fece30 3%,
+    #f5c04a 8%,
+    #e8a85a 14%,
+    #d98a6e 20%,
+    #c472a8 26%,
+    #9b6bff 32%,
+    #6e55ff 38%,
+    #6e55ff 44%,
+    #5f4fe8 48%,
+    #4f3fd4 52%,
+    #3d32b8 60%,
+    #2a228f 72%,
+    #1a1578 84%,
+    #10006b 100%
+  );
+}
+
+main {
+  position: relative;
+}
