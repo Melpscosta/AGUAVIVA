@@ -1,0 +1,329 @@
+.how-section {
+  --how-space-sm: 0.75rem;   /* 12px */
+  --how-space-md: 1rem;      /* 16px */
+  --how-space-lg: 1.5rem;    /* 24px */
+  --how-space-xl: 2rem;      /* 32px */
+  --how-space-2xl: 2.5rem;   /* 40px */
+  --how-space-3xl: 4.375rem; /* 70px */
+  --how-content-max: 40rem;
+
+  position: relative;
+  height: 280vh;
+  background: transparent;
+}
+
+.how-section__ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.how-section__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+}
+
+.how-section__glow--top {
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, 75vw);
+  height: 300px;
+  background: radial-gradient(circle, rgba(110, 85, 255, 0.1) 0%, transparent 70%);
+}
+
+.how-section__glow--bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(700px, 90vw);
+  height: 240px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.06) 0%, transparent 72%);
+}
+
+.how-section__bubbles {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255, 255, 255, 0.06) 0 2px, transparent 3px),
+    radial-gradient(circle at 88% 35%, rgba(255, 255, 255, 0.05) 0 2px, transparent 3px),
+    radial-gradient(circle at 18% 68%, rgba(255, 255, 255, 0.04) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 82% 78%, rgba(255, 255, 255, 0.04) 0 1.5px, transparent 2.5px);
+  opacity: 0.6;
+}
+
+.how-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.fish-guide-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.how-content {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--how-content-max);
+  height: 100vh;
+  margin: 0 auto;
+  padding:
+    clamp(3.75rem, 8vh, 5.5rem)
+    var(--page-padding-x)
+    clamp(2.25rem, 5vh, 3.25rem);
+  gap: clamp(var(--how-space-lg), 3.5vh, var(--how-space-2xl));
+  pointer-events: none;
+}
+
+.how-title {
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: clamp(2.375rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  text-align: center;
+  color: #ffffff;
+  margin: 0;
+  padding-bottom: clamp(var(--how-space-md), 2vh, var(--how-space-xl));
+}
+
+.how-step-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  padding-block: var(--how-space-sm);
+}
+
+.how-steps__trail {
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(196, 181, 253, 0.18) 0 4px,
+    transparent 4px 14px
+  );
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.how-step {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 0 var(--how-space-sm);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  filter: blur(2px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease,
+    visibility 0s linear 0.5s;
+  pointer-events: none;
+}
+
+.how-step.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease,
+    visibility 0s linear 0s;
+}
+
+.how-step__number {
+  font-family: var(--font-heading);
+  font-size: clamp(3.375rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #e9d5ff;
+  text-shadow: 0 0 24px rgba(196, 181, 253, 0.35);
+  margin: 0 0 var(--how-space-md);
+  transition: text-shadow 0.5s ease;
+}
+
+.how-step.is-active .how-step__number {
+  text-shadow:
+    0 0 28px rgba(196, 181, 253, 0.55),
+    0 0 48px rgba(125, 211, 252, 0.2);
+}
+
+.how-step__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0 0 var(--how-space-sm);
+}
+
+.how-step__text {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 35rem;
+  margin: 0;
+}
+
+.how-cta-wrap {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: clamp(var(--how-space-md), 2vh, var(--how-space-lg));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    visibility 0s linear 0.5s;
+}
+
+.how-cta-wrap.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    visibility 0s linear 0s;
+}
+
+.how-cta {
+  pointer-events: auto;
+  display: inline-block;
+  width: auto;
+  max-width: 26.25rem;
+  padding: 0.9375rem 2rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.5vw, 1.125rem);
+  font-weight: 400;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.how-cta:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 0 20px rgba(125, 211, 252, 0.16);
+  transform: scale(1.02);
+}
+
+.how-cta--splash {
+  animation: how-cta-splash 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(125, 211, 252, 0.45);
+  box-shadow:
+    0 0 32px rgba(125, 211, 252, 0.35),
+    0 0 64px rgba(125, 211, 252, 0.15);
+}
+
+@keyframes how-cta-splash {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+.how-section[data-reduced-motion='true'] .how-step.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.how-section[data-reduced-motion='true'] .how-cta-wrap {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.how-section[data-reduced-motion='true'] .fish-guide-canvas {
+  opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+  .how-section {
+    height: 260vh;
+  }
+
+  .how-content {
+    gap: var(--how-space-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .how-section {
+    height: 240vh;
+  }
+
+  .how-content {
+    padding-top: 3.25rem;
+    padding-bottom: 2rem;
+    gap: var(--how-space-md);
+  }
+
+  .how-title {
+    padding-bottom: var(--how-space-sm);
+  }
+
+  .how-step-stage {
+    padding-block: 0;
+  }
+
+  .how-cta-wrap {
+    padding-top: var(--how-space-sm);
+  }
+
+  .how-cta {
+    width: 100%;
+    max-width: 20rem;
+    padding: 0.875rem 1.5rem;
+  }
+}

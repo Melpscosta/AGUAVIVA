@@ -20,7 +20,7 @@ export const STEPS = [
   {
     number: 2,
     title: 'Explore e contribua',
-    text: 'Explore novos lugares enquanto participa de ações voluntárias, contribuindo com comunidades costeiras em troca de hospedagem, alimentação e transporte.',
+    text: 'Explore novos lugares enquanto participa de ações voluntárias, contribuindo com comunidades costeiras.',
     side: 'right' as const,
     icon: 'explore' as const,
   },

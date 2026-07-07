@@ -2,7 +2,8 @@
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 6rem var(--page-padding-x) 7rem;
+  padding: 5rem var(--page-padding-x) 7rem;
+  background: transparent;
 }
 
 .partnerships__ambient {
