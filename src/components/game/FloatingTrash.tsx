@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion'
 import type { TrashType } from './types'
+import Model3D from './Model3D'
+
+const BOTTLE_MODEL_SRC = `${import.meta.env.BASE_URL}low-poly_empty_plastic_bottle.glb`
 
 interface FloatingTrashProps {
   type: TrashType
@@ -12,24 +15,15 @@ function TrashIcon({ type }: { type: TrashType }) {
 
   if (type === 'bottle') {
     return (
-      <svg viewBox="0 0 48 64" className="ocean-trash__icon" aria-hidden="true">
-        <defs>
-          <linearGradient id={`tb-${uid}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="rgba(200,240,255,0.85)" />
-            <stop offset="100%" stopColor="rgba(120,200,230,0.45)" />
-          </linearGradient>
-        </defs>
-        <ellipse cx="24" cy="58" rx="10" ry="3" fill="rgba(0,0,0,0.15)" />
-        <path
-          d="M18 8h12v8l-3 6v30a5 5 0 0 1-10 0V22l-3-6V8z"
-          fill={`url(#tb-${uid})`}
-          stroke="rgba(255,255,255,0.5)"
-          strokeWidth="1"
-        />
-        <rect x="18" y="4" width="12" height="5" rx="1.5" fill="rgba(255,255,255,0.65)" />
-        <path d="M20 22h8" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" />
-        <rect x="0" y="38" width="48" height="26" fill="rgba(60,40,120,0.25)" />
-      </svg>
+      <Model3D
+        src={BOTTLE_MODEL_SRC}
+        className="ocean-trash__model"
+        fit={2}
+        spinSpeed={0.35}
+        bob={0.06}
+        rock={0.12}
+        tilt={[0.35, 0, 0.25]}
+      />
     )
   }
 

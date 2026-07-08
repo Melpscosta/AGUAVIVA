@@ -13,10 +13,14 @@ export default function Hero() {
   return (
     <section className="hero" id="sobre" aria-label="Apresentação">
       <div className="hero__horizon" aria-hidden="true">
-        <div className="hero__sky" />
-        <div className="hero__sun" />
-        <div className="hero__mountains" />
-        <div className="hero__sea" />
+        <img
+          className="hero__scene"
+          src={`${import.meta.env.BASE_URL}hero-soft-ocean.png`}
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+        <div className="hero__foreground" />
       </div>
 
       <div className="hero__game-placeholder">

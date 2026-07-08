@@ -20,13 +20,13 @@ interface OceanCleanupGameProps {
 }
 
 const TRASH_ITEMS: TrashItem[] = [
-  { id: 'trash-1', type: 'bottle', x: 56, y: 76 },
-  { id: 'trash-2', type: 'cup', x: 42, y: 84 },
-  { id: 'trash-3', type: 'ring', x: 68, y: 80 },
+  { id: 'trash-1', type: 'bottle', x: 54, y: 76 },
+  { id: 'trash-2', type: 'cup', x: 40, y: 85 },
+  { id: 'trash-3', type: 'ring', x: 66, y: 80 },
 ]
 
-const BOAT_START: ScenePoint = { x: 28, y: 78 }
-const BOTTLE_POS: ScenePoint = { x: 84, y: 70 }
+const BOAT_START: ScenePoint = { x: 26, y: 79 }
+const BOTTLE_POS: ScenePoint = { x: 82, y: 71 }
 const TOTAL_TRASH = TRASH_ITEMS.length
 
 function sceneToPx(x: number, y: number, rect: DOMRect) {
@@ -117,9 +117,9 @@ export default function OceanCleanupGame({ onMissionChange }: OceanCleanupGamePr
     if (!scene) return
     const rect = scene.getBoundingClientRect()
     const waterEl = scene.querySelector('.ocean-cleanup-game__water-canvas')
-    const waterH = waterEl?.clientHeight ?? rect.height * 0.52
+    const waterH = waterEl?.clientHeight ?? rect.height * 0.42
     const { px } = sceneToPx(x, y, rect)
-    const py = ((y - 48) / 52) * waterH
+    const py = ((y - 58) / 42) * waterH
     waterRef.current?.addRipple(px, py, intensity)
   }, [])
 

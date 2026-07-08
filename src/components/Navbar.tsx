@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Navbar.css'
 
-const navLinks = [
+const scrollLinks = [
   { label: 'Sobre', href: '#como-funciona', watchIds: ['como-funciona'] },
   { label: 'Parcerias', href: '#parcerias', watchIds: ['parcerias'] },
-  { label: 'Login', href: '#login', watchIds: ['login'] },
-  { label: 'Criar Conta', href: '#criar-conta', watchIds: ['criar-conta'] },
 ]
 
-const watchedSectionIds = [...new Set(navLinks.flatMap((link) => link.watchIds))]
+const routeLinks = [
+  { label: 'Login', to: '/login' },
+  { label: 'Criar Conta', to: '/criar-conta' },
+]
+
+const watchedSectionIds = [...new Set(scrollLinks.flatMap((link) => link.watchIds))]
 
 function JellyfishLogo() {
   return (
@@ -65,7 +69,7 @@ export default function Navbar() {
           <JellyfishLogo />
         </a>
         <ul className="navbar__links">
-          {navLinks.map((link) => {
+          {scrollLinks.map((link) => {
             const isActive = link.watchIds.includes(activeSectionId ?? '')
 
             return (
@@ -76,6 +80,16 @@ export default function Navbar() {
               </li>
             )
           })}
+          {routeLinks.map((link) => (
+            <li key={link.to}>
+              <Link
+                to={link.to}
+                className={link.to === '/criar-conta' ? 'navbar__cta' : undefined}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </header>

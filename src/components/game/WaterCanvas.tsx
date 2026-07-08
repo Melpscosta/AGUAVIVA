@@ -24,7 +24,18 @@ interface Wake {
   size: number
 }
 
-const WATER_SCENE_TOP = 48
+interface Glint {
+  x: number
+  y: number
+  len: number
+  phase: number
+  speed: number
+  warm: boolean
+}
+
+// Water area begins here (percent of hero height), matching the background
+// image horizon and the canvas placement in OceanCleanupGame.css
+const WATER_SCENE_TOP = 58
 
 function sceneYToCanvas(y: number, h: number) {
   const t = (y - WATER_SCENE_TOP) / (100 - WATER_SCENE_TOP)
@@ -45,6 +56,7 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ripplesRef = useRef<Ripple[]>([])
   const wakesRef = useRef<Wake[]>([])
+  const glintsRef = useRef<Glint[]>([])
   const rafRef = useRef(0)
   const timeRef = useRef(0)
   const prevBoatRef = useRef({ x: boatX, y: boatY })
@@ -55,20 +67,10 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
         x,
         y,
         radius: 3,
-        maxRadius: 32 + intensity * 28,
-        opacity: 0.42 * intensity,
-        lineWidth: 1.4,
+        maxRadius: 30 + intensity * 26,
+        opacity: 0.32 * intensity,
+        lineWidth: 1.2,
       })
-      if (intensity > 0.8) {
-        ripplesRef.current.push({
-          x: x + 2,
-          y: y + 1,
-          radius: 2,
-          maxRadius: 18 + intensity * 14,
-          opacity: 0.22 * intensity,
-          lineWidth: 0.8,
-        })
-      }
     },
     addWake(x: number, y: number, angle: number) {
       wakesRef.current.push({
@@ -101,11 +103,35 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
       canvas.style.width = `${w}px`
       canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      seedGlints()
+    }
+
+    // gentle shimmer segments concentrated on the sun's reflection column
+    const seedGlints = () => {
+      const w = canvas.clientWidth
+      const h = canvas.clientHeight
+      const count = Math.max(10, Math.round(w / 46))
+      glintsRef.current = Array.from({ length: count }, () => {
+        const nearColumn = Math.random() < 0.72
+        const x = nearColumn
+          ? w * (0.5 + (Math.random() - 0.5) * 0.32)
+          : w * Math.random()
+        return {
+          x,
+          y: h * (0.04 + Math.random() * 0.72),
+          len: 6 + Math.random() * 22,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.5 + Math.random() * 1.1,
+          warm: nearColumn,
+        }
+      })
     }
 
     resize()
     window.addEventListener('resize', resize)
 
+    // Delicate, soft water: the background image supplies the look; here we add
+    // gentle shimmer on the sun reflection plus interactive ripples and wake.
     const loop = (time: number) => {
       const dt = timeRef.current ? (time - timeRef.current) / 1000 : 0.016
       timeRef.current = time
@@ -116,39 +142,21 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
 
       const t = time * 0.001
 
-      const sunGrad = ctx.createLinearGradient(w * 0.55, 0, w, h * 0.35)
-      sunGrad.addColorStop(0, 'rgba(200, 220, 255, 0)')
-      sunGrad.addColorStop(0.5, 'rgba(180, 200, 255, 0.04)')
-      sunGrad.addColorStop(1, 'rgba(160, 190, 255, 0)')
-      ctx.fillStyle = sunGrad
-      ctx.fillRect(0, 0, w, h)
-
-      for (let band = 0; band < 3; band++) {
-        const shimmerY = h * (0.08 + band * 0.12) + Math.sin(t * 0.6 + band) * 4
-        const grad = ctx.createLinearGradient(0, shimmerY - 8, 0, shimmerY + 8)
-        grad.addColorStop(0, 'rgba(255,255,255,0)')
-        grad.addColorStop(0.5, `rgba(220, 235, 255, ${0.035 - band * 0.008})`)
-        grad.addColorStop(1, 'rgba(255,255,255,0)')
-        ctx.fillStyle = grad
-        ctx.fillRect(0, shimmerY - 8, w, 16)
-      }
-
-      for (let i = 0; i < 5; i++) {
+      // soft shimmering highlights (thin, low-opacity horizontal glimmers)
+      ctx.lineCap = 'round'
+      for (const g of glintsRef.current) {
+        const tw = (Math.sin(t * g.speed + g.phase) + 1) * 0.5
+        const alpha = tw * tw * (g.warm ? 0.26 : 0.12)
+        if (alpha < 0.015) continue
+        const drift = Math.sin(t * 0.4 + g.phase) * 3
+        const len = g.len * (0.7 + tw * 0.5)
         ctx.beginPath()
-        const yBase = h * (0.08 + i * 0.1)
-        const amp = 2.5 + i * 1.2
-        const freq = 0.008 + i * 0.002
-        const speed = 0.7 + i * 0.12
-        ctx.moveTo(0, yBase)
-        for (let x = 0; x <= w; x += 10) {
-          const y =
-            yBase +
-            Math.sin(x * freq + t * speed) * amp +
-            Math.sin(x * freq * 2.3 + t * speed * 1.4) * (amp * 0.35)
-          ctx.lineTo(x, y)
-        }
-        ctx.strokeStyle = `rgba(255,255,255,${0.055 - i * 0.008})`
-        ctx.lineWidth = 1 + i * 0.15
+        ctx.moveTo(g.x - len / 2 + drift, g.y)
+        ctx.lineTo(g.x + len / 2 + drift, g.y)
+        ctx.strokeStyle = g.warm
+          ? `rgba(255, 240, 210, ${alpha})`
+          : `rgba(225, 235, 255, ${alpha})`
+        ctx.lineWidth = 1.4
         ctx.stroke()
       }
 
@@ -177,15 +185,15 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
 
       for (let i = ripplesRef.current.length - 1; i >= 0; i--) {
         const r = ripplesRef.current[i]
-        r.radius += dt * 48
+        r.radius += dt * 46
         const alpha = r.opacity * (1 - r.radius / r.maxRadius)
         if (alpha <= 0.01) {
           ripplesRef.current.splice(i, 1)
           continue
         }
         ctx.beginPath()
-        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(230, 245, 255, ${alpha})`
+        ctx.ellipse(r.x, r.y, r.radius, r.radius * 0.5, 0, 0, Math.PI * 2)
+        ctx.strokeStyle = `rgba(235, 245, 255, ${alpha})`
         ctx.lineWidth = r.lineWidth * (1 - r.radius / r.maxRadius * 0.5)
         ctx.stroke()
       }
@@ -201,20 +209,8 @@ const WaterCanvas = forwardRef<WaterCanvasHandle, WaterCanvasProps>(function Wat
           continue
         }
         ctx.beginPath()
-        ctx.ellipse(wk.x, wk.y, wk.size * 2.2, wk.size * 0.65, 0, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.16})`
-        ctx.fill()
-        ctx.beginPath()
-        ctx.ellipse(
-          wk.x - wk.vx * 2,
-          wk.y - wk.vy * 2,
-          wk.size * 1.4,
-          wk.size * 0.45,
-          0,
-          0,
-          Math.PI * 2
-        )
-        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.08})`
+        ctx.ellipse(wk.x, wk.y, wk.size * 2.2, wk.size * 0.55, 0, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.14})`
         ctx.fill()
       }
 

@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
-  padding: 7rem var(--page-padding-x) 3rem;
+  padding: 11rem var(--page-padding-x) 3rem;
   overflow: hidden;
   background: linear-gradient(
     180deg,
@@ -33,88 +33,35 @@
   overflow: hidden;
 }
 
-.hero__sky {
+/* soft, painterly ocean-sunset background plate */
+.hero__scene {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 240, 200, 0.12) 0%,
-    rgba(255, 200, 160, 0.06) 30%,
-    transparent 52%
-  );
-}
-
-.hero__sun {
-  position: absolute;
-  left: 50%;
-  top: 42%;
-  transform: translate(-50%, -50%);
-  width: clamp(80px, 13vw, 120px);
-  height: clamp(80px, 13vw, 120px);
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff8ec 0%, #ffe4a8 38%, rgba(255, 190, 110, 0.35) 62%, transparent 78%);
-  box-shadow:
-    0 0 60px rgba(255, 210, 140, 0.55),
-    0 0 120px rgba(255, 180, 100, 0.2);
-}
-
-.hero__mountains {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 44%;
-  height: 10%;
-  background:
-    linear-gradient(135deg, transparent 38%, rgba(30, 15, 70, 0.5) 38%, rgba(30, 15, 70, 0.5) 52%, transparent 52%),
-    linear-gradient(225deg, transparent 32%, rgba(22, 10, 58, 0.55) 32%, rgba(22, 10, 58, 0.55) 48%, transparent 48%),
-    linear-gradient(165deg, transparent 45%, rgba(35, 18, 80, 0.45) 45%, rgba(35, 18, 80, 0.45) 58%, transparent 58%);
-  filter: blur(0.5px);
-  opacity: 0.85;
-}
-
-.hero__sea {
-  position: absolute;
-  inset: 48% 0 0;
-  background: linear-gradient(
-    180deg,
-    rgba(90, 70, 220, 0.18) 0%,
-    rgba(60, 50, 180, 0.08) 25%,
-    transparent 55%
-  );
-}
-
-.hero__sea::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 36%;
+  width: 100%;
   height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 220, 160, 0.14) 0%,
-    rgba(255, 200, 130, 0.05) 30%,
-    transparent 65%
-  );
-  filter: blur(2px);
+  object-fit: cover;
+  object-position: center 46%;
+  animation: hero-scene-drift 34s ease-in-out infinite;
 }
 
-.hero__sea::after {
-  content: '';
+@keyframes hero-scene-drift {
+  0%,
+  100% {
+    transform: scale(1.03) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate(-0.6%, -0.4%);
+  }
+}
+
+/* subtle foreground darkening in the lower corners + blend into next section */
+.hero__foreground {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 220, 180, 0.25) 15%,
-    rgba(255, 240, 210, 0.45) 50%,
-    rgba(255, 220, 180, 0.25) 85%,
-    transparent 100%
-  );
+  inset: 0;
+  background:
+    radial-gradient(120% 78% at 0% 120%, rgba(18, 12, 60, 0.5) 0%, transparent 46%),
+    radial-gradient(120% 78% at 100% 120%, rgba(18, 12, 60, 0.5) 0%, transparent 46%),
+    linear-gradient(180deg, transparent 70%, rgba(30, 29, 114, 0.55) 100%);
 }
 
 .hero::after {
@@ -197,7 +144,7 @@
 @media (max-width: 640px) {
   .hero {
     min-height: 100svh;
-    padding: 6rem var(--page-padding-x) 2.5rem;
+    padding: 8.5rem var(--page-padding-x) 2.5rem;
   }
 
   .hero__tagline {
